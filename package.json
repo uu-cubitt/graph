@@ -1,0 +1,38 @@
+{
+  "name": "cubitt-graph",
+  "version": "0.5.0",
+  "description": "Cubitt in-memory graph with subraphs and connectors",
+  "main": "dist/cubitt-graph.js",
+  "typings": "dist/cubitt-graph",
+  "scripts": {
+    "test": "cd dist && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:uu-cubitt/graph.git"
+  },
+  "keywords": [
+    "cubitt",
+    "cubitt-common"
+  ],
+  "contributors": [
+    "Thomas Ipskamp <thomas.ipskamp@gmail.com>",
+    "Sander Klock <sander.klock@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/uu-cubitt/graph/issues"
+  },
+  "homepage": "https://uu-cubitt.github.io/graph",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.4",
+    "node-debug": "^0.1.0",
+    "typedoc": "^0.3.12",
+    "typescript": "^1.7.5",
+    "typings": "^0.6.2"
+  },
+  "dependencies": {
+    "cubitt-common": "~0.5.0"
+  }
+}

@@ -1,0 +1,36 @@
+import * as Common from "cubitt-common";
+import { ElementType } from "./ElementType";
+import { Graph } from "./Graph";
+export declare abstract class AbstractElement {
+    protected id: Common.Guid;
+    protected type: ElementType;
+    protected properties: Common.Dictionary<any>;
+    protected nodeNeighbours: Common.Dictionary<Common.Guid>;
+    protected edgeNeighbours: Common.Dictionary<Common.Guid>;
+    protected connectorNeighbours: Common.Dictionary<Common.Guid>;
+    protected modelNeighbours: Common.Dictionary<Common.Guid>;
+    constructor(id: Common.Guid, properties?: Common.Dictionary<any>);
+    Id: Common.Guid;
+    abstract getType(): ElementType;
+    abstract delete(graph: Graph): void;
+    protected remove(graph: Graph): void;
+    addNodeNeighbour(id: Common.Guid): void;
+    addEdgeNeighbour(id: Common.Guid): void;
+    addConnectorNeighbour(id: Common.Guid): void;
+    addModelNeighbour(id: Common.Guid): void;
+    protected internalGetNeighbours(type?: ElementType): Common.Guid[];
+    getNeighbours(): Common.Guid[];
+    getNodeNeighbours(): Common.Guid[];
+    getEdgeNeighbours(): Common.Guid[];
+    getConnectorNeighbours(): Common.Guid[];
+    getModelNeighbours(): Common.Guid[];
+    setProperty(name: string, value: any): void;
+    deleteProperty(id: Common.Guid, name: string): void;
+    getProperty(name: string): any;
+    getProperties(): Common.Dictionary<any>;
+    unlinkNodeNeighbour(id: Common.Guid): void;
+    unlinkEdgeNeighbour(id: Common.Guid): void;
+    unlinkConnectorNeighbour(id: Common.Guid): void;
+    unlinkModelNeighbour(id: Common.Guid): void;
+    private toArray(dictionary);
+}
