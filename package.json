@@ -1,6 +1,6 @@
 {
   "name": "cubitt-graph",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Cubitt in-memory graph with subgraphs and connectors",
   "main": "dist/cubitt-graph.js",
   "typings": "dist/cubitt-graph",
