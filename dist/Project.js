@@ -37,11 +37,11 @@ var Project = (function () {
     Project.prototype.deleteProperty = function (id, key) {
         this.graph.deleteProperty(id, key);
     };
-    Project.prototype.toJSON = function () {
-        return this.graph.toJSON();
+    Project.prototype.serialize = function () {
+        return this.graph.serialize();
     };
-    Project.prototype.fromJSON = function (jsonObject) {
-        return this.graph.fromJSON(jsonObject);
+    Project.prototype.deserialize = function (jsonObject) {
+        return this.graph.deserialize(jsonObject);
     };
     Project.prototype.hasElement = function (id) {
         return this.graph.hasElement(id);

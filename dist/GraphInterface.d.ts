@@ -10,8 +10,8 @@ export interface GraphInterface {
     deleteConnector(id: Common.Guid): any;
     deleteModel(id: Common.Guid): any;
     deleteProperty(id: Common.Guid, name: string): any;
-    toJSON(): Object;
-    fromJSON(jsonObject: Object): GraphInterface;
+    serialize(): Object;
+    deserialize(jsonObject: Object): GraphInterface;
     hasElement(id: Common.Guid): boolean;
     hasModel(id: Common.Guid): boolean;
     hasNode(id: Common.Guid): boolean;

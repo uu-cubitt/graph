@@ -96,17 +96,17 @@ export interface GraphInterface {
      * Transforms this Graph to a plain JSON graph
      *
      */
-    toJSON() : Object;
+    serialize() : Object;
 
     /**
      * Creates a new GraphInterface from a JSON Graph
      *
      * For the expected format, please read the documentation
-     * The expected format is the same as the format returned by toJSON()
+     * The expected format is the same as the format returned by serialize()
      *
      * @param jsonObject JSON Object that should be converted to GraphInterface
      */
-     fromJSON(jsonObject : Object) : GraphInterface;
+     deserialize(jsonObject : Object) : GraphInterface;
 
     /**
      * Returns whether an Element with the ID exists

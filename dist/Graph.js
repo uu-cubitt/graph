@@ -153,7 +153,7 @@ var Graph = (function () {
         }
         elem.deleteProperty(id, name);
     };
-    Graph.prototype.fromJSON = function (jsonObject) {
+    Graph.prototype.deserialize = function (jsonObject) {
         var graph = new Graph();
         var modelElements = {};
         var models = jsonObject['models'];
@@ -198,7 +198,7 @@ var Graph = (function () {
         }
         return properties;
     };
-    Graph.prototype.toJSON = function () {
+    Graph.prototype.serialize = function () {
         var graph = {
             "models": {},
             "nodes": {},

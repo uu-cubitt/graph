@@ -94,15 +94,15 @@ export class Project implements GraphInterface {
     /**
      * @inheritdoc
      */
-    toJSON() {
-        return this.graph.toJSON();
+    serialize() {
+        return this.graph.serialize();
     }
 
     /**
      * @inheritdoc
      */
-    fromJSON(jsonObject: Object) {
-        return this.graph.fromJSON(jsonObject);
+    deserialize(jsonObject: Object) {
+        return this.graph.deserialize(jsonObject);
     }
 
     /**

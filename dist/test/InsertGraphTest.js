@@ -17,9 +17,9 @@ describe('Insert tests', function () {
     beforeEach(function () {
         subject = new cubitt_graph_1.Project();
     });
-    describe('#toJSON', function () {
+    describe('#serialize', function () {
         it('should correctly serialize an empty Project', function (done) {
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -33,7 +33,7 @@ describe('Insert tests', function () {
             var guid = Common.Guid.newGuid();
             var guidstr = guid.toString();
             subject.addModel(guid, "TEST_MODEL");
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -60,7 +60,7 @@ describe('Insert tests', function () {
             var nodeGuid = Common.Guid.newGuid();
             subject.addModel(modelGuid, "TEST_MODEL");
             subject.addNode(nodeGuid, "TEST_NODE", modelGuid, { "testkey": "testvalue" });
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -103,7 +103,7 @@ describe('Insert tests', function () {
             subject.addModel(guids.model, "TEST_MODEL");
             subject.addNode(guids.node, "TEST_NODE", guids.model, { "testkey": "testvalue" });
             subject.addConnector(guids.connector, "TEST_CONNECTOR", guids.node);
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -164,7 +164,7 @@ describe('Insert tests', function () {
             subject.addConnector(guids.connector, "TEST_CONNECTOR", guids.node);
             subject.addConnector(guids.connector2, "TEST_CONNECTOR", guids.node2);
             subject.addEdge(guids.edge, "TEST_EDGE", guids.model, guids.connector, guids.connector2);
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -251,7 +251,7 @@ describe('Insert tests', function () {
             var guid = Common.Guid.newGuid();
             var guidstr = guid.toString();
             subject.addModel(guid, "TEST_MODEL");
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},
@@ -272,7 +272,7 @@ describe('Insert tests', function () {
             };
             expect(result).to.deep.equal(expected);
             subject.setProperty(guid, "testproperty", "testvalue");
-            var result = subject.toJSON();
+            var result = subject.serialize();
             var expected = {
                 "models": {},
                 "nodes": {},

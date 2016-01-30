@@ -18,7 +18,7 @@ function uniqueGUID() {
 }
 
 function showGUIDTypes(subject: GraphInterface) {
-    var elems = subject.toJSON();
+    var elems = subject.serialize();
     console.log("Models:")
     for (var id in elems["models"]) {
         console.log(" - " + id);
@@ -45,7 +45,7 @@ describe('Deserialize tests', () => {
 
 
     describe('Simple graph', () => {
-        it('fromJSON().toJSON() should equal toJSON()', (done) => {
+        it('deserialize().serialize() should equal serialize()', (done) => {
             subject = new Project();
 
             guids.model = uniqueGUID();
@@ -62,10 +62,9 @@ describe('Deserialize tests', () => {
             subject.addConnector(guids.connector2,"TEST_CONNECTOR", guids.node2);
             subject.addEdge(guids.edge,"TEST_EDGE",guids.model, guids.connector, guids.connector2);
 
-            var json = subject.toJSON();
-            var result = subject.fromJSON(json);
-            debugger
-            expect(result.toJSON()).to.deep.equal(json)
+            var json = subject.serialize();
+            var result = subject.deserialize(json);
+            expect(result.serialize()).to.deep.equal(json)
             done();
         });
 

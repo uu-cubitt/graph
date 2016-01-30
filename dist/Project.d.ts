@@ -14,13 +14,13 @@ export declare class Project implements GraphInterface {
     deleteConnector(id: Common.Guid): void;
     deleteModel(id: Common.Guid): void;
     deleteProperty(id: Common.Guid, key: string): void;
-    toJSON(): {
+    serialize(): {
         "models": {};
         "nodes": {};
         "edges": {};
         "connectors": {};
     };
-    fromJSON(jsonObject: Object): any;
+    deserialize(jsonObject: Object): GraphInterface;
     hasElement(id: Common.Guid): boolean;
     hasModel(id: Common.Guid): boolean;
     hasNode(id: Common.Guid): boolean;

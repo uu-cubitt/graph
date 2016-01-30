@@ -18,7 +18,7 @@ A Connector is an element that is connected to a Node, to which edges can be con
 * ```Edge```
 An traditional directed edge that can be connected to connectors. It is not possible to connect an Edge directly to a Node.
 
-It's main use will be for the Cubitt framework, but the graph can be used standalone if it fits your datamodel.
+It's main use case will be for the Cubitt framework, but the graph can be used standalone if it fits your datamodel.
 
 ## Installation
 
@@ -29,7 +29,7 @@ $ npm install cubitt-graph
 ## Features
 
 * Intergraph links
-* Subgraphs (will be extended to hierarchical graphs, see issue \#1)
+* Subgraphs (will be extended to hierarchical graphs, see [issue \#1](https://github.com/uu-cubitt/graph/issues/1))
 * Connector support
 * Properties support on all Elements
 * Typescript

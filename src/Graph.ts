@@ -266,7 +266,7 @@ export class Graph implements GraphInterface {
     /**
      * @inheritdoc
      */
-    public fromJSON(jsonObject : Object) : GraphInterface {
+    public deserialize(jsonObject : Object) : GraphInterface {
         var graph = new Graph();
         var modelElements: Common.Dictionary<ModelElement> = {};
         var models = jsonObject['models'];
@@ -322,7 +322,7 @@ export class Graph implements GraphInterface {
     /**
      * @inheritdoc
      */
-    public toJSON() {
+    public serialize() {
         var graph = {
          "models"     : {},
          "nodes"      : {},

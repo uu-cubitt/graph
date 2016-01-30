@@ -24,9 +24,9 @@ describe('Insert tests', () => {
         subject = new Project();
     });
 
-    describe('#toJSON', () => {
+    describe('#serialize', () => {
         it('should correctly serialize an empty Project', (done) => {
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -41,7 +41,7 @@ describe('Insert tests', () => {
             var guid = Common.Guid.newGuid();
             var guidstr = guid.toString();
             subject.addModel(guid, "TEST_MODEL");
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -70,7 +70,7 @@ describe('Insert tests', () => {
 
             subject.addModel(modelGuid, "TEST_MODEL");
             subject.addNode(nodeGuid,"TEST_NODE",modelGuid,{"testkey" : "testvalue"})
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -115,7 +115,7 @@ describe('Insert tests', () => {
             subject.addModel(guids.model, "TEST_MODEL");
             subject.addNode(guids.node,"TEST_NODE",guids.model,{"testkey" : "testvalue"});
             subject.addConnector(guids.connector,"TEST_CONNECTOR", guids.node)
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -179,7 +179,7 @@ describe('Insert tests', () => {
             subject.addConnector(guids.connector2,"TEST_CONNECTOR", guids.node2);
             subject.addEdge(guids.edge,"TEST_EDGE",guids.model, guids.connector, guids.connector2);
 
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -267,7 +267,7 @@ describe('Insert tests', () => {
             var guid = Common.Guid.newGuid();
             var guidstr = guid.toString();
             subject.addModel(guid, "TEST_MODEL");
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},
@@ -289,7 +289,7 @@ describe('Insert tests', () => {
             expect(result).to.deep.equal(expected);
 
             subject.setProperty(guid, "testproperty", "testvalue");
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             var expected = {
              "models"     : {},
              "nodes"      : {},

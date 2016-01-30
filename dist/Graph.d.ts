@@ -22,9 +22,9 @@ export declare class Graph implements GraphInterface {
     deleteConnector(id: Common.Guid): void;
     deleteModel(id: Common.Guid): void;
     deleteProperty(id: Common.Guid, name: string): void;
-    fromJSON(jsonObject: Object): GraphInterface;
+    deserialize(jsonObject: Object): GraphInterface;
     private propertiesFromJSON(jsonProperties);
-    toJSON(): {
+    serialize(): {
         "models": {};
         "nodes": {};
         "edges": {};

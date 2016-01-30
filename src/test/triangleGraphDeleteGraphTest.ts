@@ -18,7 +18,7 @@ function uniqueGUID() {
 }
 
 function showGUIDTypes(subject: GraphInterface) {
-    var elems = subject.toJSON();
+    var elems = subject.serialize();
     console.log("Models:")
     for (var id in elems["models"]) {
         console.log(" - " + id);
@@ -78,7 +78,7 @@ describe('Triangle Graph Delete tests', () => {
     describe('Delete actions', () => {
         it('should correctly delete an edge', (done) => {
             subject.deleteEdge(guids.edge);
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             // Create expected version
             var expected : GraphInterface = new Project();
             expected.addModel(guids.model, "TEST_MODEL");
@@ -92,13 +92,13 @@ describe('Triangle Graph Delete tests', () => {
             expected.addEdge(guids.edge2,"TEST_EDGE",guids.model, guids.connector2, guids.connector3);
             expected.addEdge(guids.edge3,"TEST_EDGE",guids.model, guids.connector3, guids.connector);
 
-            expect(result).to.deep.equal(expected.toJSON())
+            expect(result).to.deep.equal(expected.serialize())
             done();
         });
 
         it('should correctly delete a connector', (done) => {
             subject.deleteConnector(guids.connector);
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             // Create expected version
             var expected : GraphInterface = new Project();
             expected.addModel(guids.model, "TEST_MODEL");
@@ -110,13 +110,13 @@ describe('Triangle Graph Delete tests', () => {
             expected.addEdge(guids.edge2,"TEST_EDGE",guids.model, guids.connector2, guids.connector3);
 
 
-            expect(result).to.deep.equal(expected.toJSON())
+            expect(result).to.deep.equal(expected.serialize())
             done();
         });
 
         it('should correctly delete a node', (done) => {
             subject.deleteNode(guids.node);
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             // Create expected version
             var expected : GraphInterface = new Project();
             expected.addModel(guids.model, "TEST_MODEL");
@@ -126,17 +126,17 @@ describe('Triangle Graph Delete tests', () => {
             expected.addConnector(guids.connector3,"TEST_CONNECTOR", guids.node3);
             expected.addEdge(guids.edge2,"TEST_EDGE",guids.model, guids.connector2, guids.connector3);
 
-            expect(result).to.deep.equal(expected.toJSON())
+            expect(result).to.deep.equal(expected.serialize())
             done();
         });
 
         it('should correctly delete a model', (done) => {
             subject.deleteModel(guids.model)
-            var result : Object = subject.toJSON();
+            var result : Object = subject.serialize();
             // Create expected version
             var expected : GraphInterface = new Project();
 
-            expect(result).to.deep.equal(expected.toJSON())
+            expect(result).to.deep.equal(expected.serialize())
             done();
         });
 
