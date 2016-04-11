@@ -5,7 +5,7 @@
   "main": "dist/cubitt-graph.js",
   "typings": "dist/cubitt-graph",
   "scripts": {
-    "test": "cd dist && mocha"
+    "test": "cd dist && mocha --bail --require source-map-support/register"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "chai": "^3.5.0",
     "mocha": "^2.4.4",
     "node-debug": "^0.1.0",
+    "source-map-support": "^0.4.0",
     "typedoc": "^0.3.12",
     "typescript": "^1.7.5",
     "typings": "^0.6.2"
