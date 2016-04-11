@@ -24,7 +24,7 @@ export class ModelElement extends AbstractElement {
          * which will remove the edges
          * (connectors are not linked to the model directly)
          */
-        var nodeIds = this.getNodeNeighbours();
+        var nodeIds = this.getChildNodeNeighbours();
 
         for (var nodeId of nodeIds) {
             var node = graph.getElement(nodeId);

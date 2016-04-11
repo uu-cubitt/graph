@@ -31,7 +31,7 @@ export interface GraphInterface {
      * Adds a Connector to the Graph
      *
      * @param id Identifier of the Connector to add, this GUID should not already exist in the system
-     * @param type string String representing the type of the connector (i.e. "NETWORK_LAN" or "FAM_DATA_CONNECTOR")
+     * @param type String representing the type of the connector (i.e. "NETWORK_LAN" or "FAM_DATA_CONNECTOR")
      * @param nodeId Identifier of the Node that contains this Connector
      * @param properties Dictionary of properties of the Connector
      */
@@ -41,11 +41,12 @@ export interface GraphInterface {
      * Adds a Model to the Graph
      *
      * @param id Identifier of the Model to add, this GUID should not already exist in the system
-     * @param type string String representing the type of the connector (i.e. "MODEL_FAM" or "MODEL_UML")
+     * @param type String representing the type of the connector (i.e. "MODEL_FAM" or "MODEL_UML")
      * @param properties Dictionary of properties of the Model
+     * @param parentId Identifier of the parent of this subgraph. Leave empty to create a model under the root
      *
      */
-    addModel(id: Common.Guid, type: string, properties ?: Common.Dictionary<any>);
+    addModel(id: Common.Guid, type: string, properties ?: Common.Dictionary<any>, parentId ?: Common.Guid);
 
     /**
      * Sets a property on an Element

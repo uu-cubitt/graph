@@ -19,15 +19,15 @@ export class ConnectorElement extends AbstractElement {
      * @inheritdoc
      */
     public delete(graph: Graph) {
-        var edgeIds = this.getEdgeNeighbours();
+        var edgeIds = this.getChildEdgeNeighbours();
         for (var edgeId of edgeIds) {
             var edge = graph.getElement(edgeId);
             edge.delete(graph);
         }
-        var NodeIds = this.getNodeNeighbours();
+        var NodeIds = this.getParentNodeNeighbours();
         for (var nodeId of NodeIds) {
             var node = graph.getElement(nodeId);
-            node.unlinkConnectorNeighbour(this.Id);
+            node.unlinkChildConnectorNeighbour(this.Id);
         }
         this.remove(graph);
     }

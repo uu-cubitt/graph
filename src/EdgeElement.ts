@@ -52,7 +52,7 @@ export class EdgeElement extends AbstractElement {
      */
     public addStartConnector(connectorId: Common.Guid) {
         this.start = connectorId;
-        this.addConnectorNeighbour(connectorId);
+        this.addParentConnectorNeighbour(connectorId);
     }
 
     /**
@@ -62,7 +62,7 @@ export class EdgeElement extends AbstractElement {
      */
     public addEndConnector(connectorId: Common.Guid) {
         this.end = connectorId;
-        this.addConnectorNeighbour(connectorId);
+        this.addParentConnectorNeighbour(connectorId);
     }
 
     /**
@@ -72,13 +72,13 @@ export class EdgeElement extends AbstractElement {
         var connectorIds = this.getConnectorNeighbours();
         for (var connectorId of connectorIds) {
             var connector = graph.getElement(connectorId);
-            connector.unlinkEdgeNeighbour(this.id);
+            connector.unlinkChildEdgeNeighbour(this.id);
         }
         // Unlink from model
-        var modelIds = this.getModelNeighbours();
+        var modelIds = this.getParentModelNeighbours();
         for (var modelId of modelIds) {
             var model = graph.getElement(modelId);
-            model.unlinkEdgeNeighbour(this.id);
+            model.unlinkChildEdgeNeighbour(this.id);
         }
         this.remove(graph);
     }

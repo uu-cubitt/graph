@@ -9,7 +9,7 @@
         "declaration": true,
         "suppressImplicitAnyIndexErrors": true,
         "outDir": "../dist/",
-        "sourceMap": false
+        "sourceMap": true
     },
     "filesGlob": [
         "./**/*.ts",
@@ -26,10 +26,14 @@
         "./ModelElement.ts",
         "./NodeElement.ts",
         "./Project.ts",
-        "./test/deleteGraphTest.ts",
-        "./test/deserializeGraphTest.ts",
-        "./test/InsertGraphTest.ts",
-        "./test/triangleGraphDeleteGraphTest.ts",
+        "./test/01_EmptyGraphTests.ts",
+        "./test/02_SingleModelTests.ts",
+        "./test/03_SingleNodeTests.ts",
+        "./test/04_SingleConnectorTests.ts",
+        "./test/05_SingleEdgeTests.ts",
+        "./test/06_CyclicGraphTests.ts",
+        "./test/06_EmptyHierarchicalGraphTests.ts",
+        "./test/helper/ExpectationBuilder.ts",
         "./typings/assertion-error/assertion-error.d.ts",
         "./typings/chai/chai.d.ts",
         "./typings/mocha/mocha.d.ts",

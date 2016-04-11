@@ -38,9 +38,9 @@ export class Project implements GraphInterface {
     /**
      * @inheritdoc
      */
-    addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any> = {})
+    addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any> = {}, parentId ?: Common.Guid)
     {
-        this.graph.addModel(id, type, properties);
+        this.graph.addModel(id, type, properties, parentId);
     }
 
     /**

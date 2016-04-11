@@ -107,10 +107,13 @@ export class Graph implements GraphInterface {
         if (model.getType() != ElementType.Model) {
             throw new Error("GUID " + modelId.toString() + " does not belong to a model");
         }
+        if (properties == null || properties == undefined) {
+            properties = {};
+        }
         properties["type"] = type;
         var node = new NodeElement(id, properties);
-        node.addModelNeighbour(modelId);
-        model.addNodeNeighbour(id);
+        node.addParentModelNeighbour(modelId);
+        model.addChildNodeNeighbour(id);
 
         this.Elements[node.Id.toString()] = node;
     }
@@ -151,17 +154,20 @@ export class Graph implements GraphInterface {
         if (endConnector.getType() != ElementType.Connector) {
             throw new Error("Invalid endConnectorId, "  + endConnectorId + " does not belong to a connector");
         }
+        if (properties == null || properties == undefined) {
+            properties = {};
+        }
         properties["type"] = type;
         var edge = new EdgeElement(id, properties);
-        // By convention, element 0 is the start item, 1 is the end
+
         edge.addStartConnector(startConnectorId);
         edge.addEndConnector(endConnectorId);
 
-        startConnector.addEdgeNeighbour(id);
-        endConnector.addEdgeNeighbour(id);
+        startConnector.addChildEdgeNeighbour(id);
+        endConnector.addChildEdgeNeighbour(id);
 
-        model.addEdgeNeighbour(id);
-        edge.addModelNeighbour(modelId);
+        model.addChildEdgeNeighbour(id);
+        edge.addParentModelNeighbour(modelId);
 
         this.Elements[id.toString()] = edge;
     }
@@ -184,11 +190,13 @@ export class Graph implements GraphInterface {
         if (node.getType() != ElementType.Node) {
             throw new Error("Invalid nodeId, "  + nodeId + " does not belong to a Node")
         }
-
+        if (properties == null || properties == undefined) {
+            properties = {};
+        }
         properties["type"] = type;
         var connector = new ConnectorElement(id, properties);
-        node.addConnectorNeighbour(id);
-        connector.addNodeNeighbour(nodeId);
+        node.addChildConnectorNeighbour(id);
+        connector.addParentNodeNeighbour(nodeId);
 
         this.Elements[id.toString()] = connector;
     }
@@ -196,16 +204,38 @@ export class Graph implements GraphInterface {
     /**
      * @inheritdoc
      */
-    public addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any>)
+    public addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any>, parentId ?: Common.Guid)
     {
         // Validate GUID
         if (this.hasElement(id)) {
             throw new Error("An Element with GUID " + id.toString() + " already exists");
         }
+        // If parentId is set validate it
+        if (parentId != null && parentId != undefined) {
+
+            // Validate if there is an node or edge with the provided GUID
+            if ((this.hasNode(parentId) || this.hasEdge(parentId)) == false) {
+                throw new Error("No Node or Edge with GUID " + parentId.toString() +" could be found");
+            }
+        }
+        if (properties == null || properties == undefined) {
+            properties = {};
+        }
         properties["type"] = type;
         var model = new ModelElement(id, properties);
-        this.Elements[id.toString()] = model;
+        // Attach it to parent if available
+        if (parentId != null && parentId != undefined) {
+            var parent = this.getElement(parentId);
+            parent.addChildModelNeighbour(id);
+            if (this.hasEdge(parentId)) {
+                model.addParentEdgeNeighbour(parentId);
+            }
+            if (this.hasNode(parentId)) {
+                model.addParentNodeNeighbour(parentId);
+            }
 
+        }
+        this.Elements[id.toString()] = model;
     }
 
     /**
@@ -270,6 +300,7 @@ export class Graph implements GraphInterface {
         var graph = new Graph();
         var modelElements: Common.Dictionary<ModelElement> = {};
         var models = jsonObject['models'];
+        // Models
         for (var modelKey in models) {
             var model = models[modelKey];
             // Only add the model elements themselves, any neighbours will be added
@@ -278,20 +309,37 @@ export class Graph implements GraphInterface {
             var properties = this.propertiesFromJSON(model["properties"]);
             graph.addModel(id,properties["type"],properties);
         }
+
         var nodes = jsonObject['nodes'];
         for (var nodeKey in nodes) {
             var node = nodes[nodeKey];
             var id = Common.Guid.parse(node["id"]);
             var properties = this.propertiesFromJSON(node["properties"]);
-            var modelId = Common.Guid.parse(node["neighbours"]["models"][0]);
-            graph.addNode(id,properties["type"],modelId,properties)
+            var modelNeighbours = node["neighbours"]["models"];
+            for (var modelKey in modelNeighbours) {
+                var model = modelNeighbours[modelKey];
+                if (model.role == undefined || model.role == "parent") {
+                    modelId = Common.Guid.parse(model.id);
+                    break;
+                }
+            }
+
+            graph.addNode(id,properties["type"], modelId, properties)
         }
         var connectors = jsonObject['connectors'];
         for (var connectorKey in connectors) {
             var connector = connectors[connectorKey];
             var id = Common.Guid.parse(connector["id"]);
             var properties = this.propertiesFromJSON(connector["properties"]);
-            var nodeId = Common.Guid.parse(connector["neighbours"]["nodes"]["0"]);
+            var nodeNeighbours = connector["neighbours"]["nodes"];
+            var nodeId : Common.Guid;
+            for (var nodeKey in nodeNeighbours) {
+                var node = nodeNeighbours[nodeKey];
+                if (node.role == undefined || node.role == "parent") {
+                    nodeId = Common.Guid.parse(node.id);
+                    break;
+                }
+            }
             graph.addConnector(id,properties['type'],nodeId, properties);
         }
         var edges = jsonObject['edges'];
@@ -299,9 +347,17 @@ export class Graph implements GraphInterface {
             var edge = edges[edgeKey];
             var id = Common.Guid.parse(edge["id"]);
             var properties = this.propertiesFromJSON(edge["properties"]);
-            var modelId = Common.Guid.parse(edge["neighbours"]["models"][0]);
-            var startConnector = Common.Guid.parse(edge["neighbours"]["connectors"][0]);
-            var endConnector = Common.Guid.parse(edge["neighbours"]["connectors"][1]);
+            var modelNeighbours = edge["neighbours"]["models"];
+            var modelId : Common.Guid;
+            for (var modelKey in modelNeighbours) {
+                var model = modelNeighbours[modelKey];
+                if (model.role == undefined || model.role == "parent") {
+                    modelId = Common.Guid.parse(model.id);
+                    break;
+                }
+            }
+            var startConnector = Common.Guid.parse(edge["neighbours"]["connectors"][0]['id']);
+            var endConnector = Common.Guid.parse(edge["neighbours"]["connectors"][1]['id']);
             graph.addEdge(id,properties["type"],modelId,startConnector, endConnector, properties);
         }
         return graph;
@@ -319,6 +375,20 @@ export class Graph implements GraphInterface {
         return properties;
     }
 
+    private serializeNeighbours(parents: Common.Guid[], children: Common.Guid[]) {
+        return parents.map(
+                function(val) {
+                    return { "id" :val.toString(), "role" : "parent" };
+                }
+            ).concat(
+                children.map(
+                    function(val) {
+                        return { "id" :val.toString(), "role" : "child" };
+                    }
+                )
+            );
+    }
+
     /**
      * @inheritdoc
      */
@@ -333,16 +403,15 @@ export class Graph implements GraphInterface {
         var elements = this.Elements;
         for (var key in elements) {
             var elem  = elements[key];
-
             var obj =
                 {
                     "id" : elem.Id.toString(),
                     "properties" : elem.getProperties(),
                     "neighbours" : {
-                        "models" : elem.getModelNeighbours().map(function(val) { return val.toString(); }),
-                        "nodes"  : elem.getNodeNeighbours().map(function(val) { return val.toString(); }),
-                        "edges"  : elem.getEdgeNeighbours().map(function(val) { return val.toString(); }),
-                        "connectors" : elem.getConnectorNeighbours().map(function(val) { return val.toString(); })
+                        "models" : this.serializeNeighbours(elem.getParentModelNeighbours(), elem.getChildModelNeighbours()),
+                        "nodes"  : this.serializeNeighbours(elem.getParentNodeNeighbours(), elem.getChildNodeNeighbours()),
+                        "edges"  : this.serializeNeighbours(elem.getParentEdgeNeighbours(), elem.getChildEdgeNeighbours()),
+                        "connectors" : this.serializeNeighbours(elem.getParentConnectorNeighbours(), elem.getChildConnectorNeighbours())
                     }
                 };
             if (elem.getType() == ElementType.Node) {

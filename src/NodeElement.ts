@@ -23,16 +23,16 @@ export class NodeElement extends AbstractElement {
          * connectors connected to this element.
          *
          */
-        var edges = this.getEdgeNeighbours();
-        var connectors = this.getConnectorNeighbours();
-        var models = this.getModelNeighbours();
+        var edges = this.getParentEdgeNeighbours();
+        var connectors = this.getChildConnectorNeighbours();
+        var models = this.getParentModelNeighbours();
         for (var conId of connectors) {
             var connector = graph.getElement(conId);
             connector.delete(graph);
         }
         for (var modelId of models) {
             var model = graph.getElement(modelId);
-            model.unlinkNodeNeighbour(this.id); //Remove the reference to this class
+            model.unlinkChildNodeNeighbour(this.id); //Remove the reference to this class
         }
         this.remove(graph);
     }
