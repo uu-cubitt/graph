@@ -30,6 +30,14 @@ export class ModelElement extends AbstractElement {
             var node = graph.getElement(nodeId);
             node.delete(graph);
         }
+
+        // Remove model from any parent Nodes (if any)
+        var parentNodes = this.getParentNodeNeighbours();
+        for (var parentNodeId of parentNodes) {
+            var parentNode = graph.getElement(parentNodeId);
+            parentNode.unlinkChildModelNeighbour(this.id);
+
+        }
         this.remove(graph);
     }
 

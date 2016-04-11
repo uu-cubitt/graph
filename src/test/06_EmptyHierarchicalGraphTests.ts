@@ -47,121 +47,55 @@ describe('Single Node Hierarchical Graph', () => {
     });
 
     describe('Serialize', () => {
-        it('should correctly serialize a Project with a single Model and a Node', (done) => {
+        it('should correctly serialize a Project with a single Model, a Node and a Submodel', (done) => {
                 var result : Object = subject.serialize();
                 expect(subject.serialize()).to.deep.equal(expectationBuilder.toObject());
                 done();
         });
     });
-    /*
-    describe('Insert Connector', () => {
-        it('Should correctly create a connector', (done) => {
+
+    describe('addNode', () => {
+        it('Should correctly add a subnode', (done) => {
             var guid = uniqueGUID();
-            subject.addConnector(guid,"TEST_CONNECTOR",nodeGuid);
+            subject.addNode(guid,"TEST_SUBNODE", childModelGuid);
 
             var result : Object = subject.serialize();
-            var expected = {
-             "models"     : {
-                 [modelGuid.toString()] : {
-                     "id" : modelGuid.toString(),
-                     "neighbours" : {
-                         "models"     : {
-                             "child"  : [],
-                             "parent" : []
-                         },
-                         "nodes"      : [nodeGuid.toString()],
-                         "edges"      : [],
-                         "connectors" : []
-                     },
-                     "properties" : {
-                         "type" : "TEST_MODEL",
-                         "testprop" : "testval"
-                     }
-                 }
-             },
-             "nodes"      : {
-                 [nodeGuid.toString()] : {
-                     "id" : nodeGuid.toString(),
-                     "neighbours" : {
-                         "models"     : {
-                             "child"  : [],
-                             "parent" : [modelGuid.toString()]
-                         },
-                         "nodes"      : [],
-                         "edges"      : [],
-                         "connectors" : [guid.toString()]
-                     },
-                     "properties" : {
-                         "type" : "TEST_NODE"
-                     }
-                 }
-             },
-             "edges"      : {},
-             "connectors" : {
-                 [guid.toString()] : {
-                     "id" : guid.toString(),
-                     "neighbours" : {
-                         "models"     : {
-                             "parent" : [],
-                             "child"  : []
-                         },
-                         "nodes"      : [nodeGuid.toString()],
-                         "edges"      : [],
-                         "connectors" : []
-                     },
-                     "properties" : {
-                         "type" : "TEST_CONNECTOR"
-                     }
-                 }
-             }
-            };
-            expect(subject.serialize()).to.deep.equal(expected)
+            expectationBuilder.addNode(guid,"TEST_SUBNODE")
+                .addNodeToModel(guid,childModelGuid);
+            expect(subject.serialize()).to.deep.equal(expectationBuilder.toObject())
             done();
         });
     });
 
     describe('Delete', () => {
-        it('the Node should result in a graph with only the Model', (done) => {
-            subject.deleteNode(nodeGuid);
-            var expected = {
-             "models"     : {
-                 [modelGuid.toString()] : {
-                     "id" : modelGuid.toString(),
-                     "neighbours" : {
-                         "models"     : {
-                             "child"  : [],
-                             "parent" : []
-                         },
-                         "nodes"      : [],
-                         "edges"      : [],
-                         "connectors" : []
-                     },
-                     "properties" : {
-                         "type" : "TEST_MODEL",
-                         "testprop" : "testval"
-                     }
-                 }
-             },
-             "nodes"      : {},
-             "edges"      : {},
-             "connectors" : {}
-            };
-            expect(subject.serialize()).to.deep.equal(expected)
+        it('the submodel should result in a Model with a Node', (done) => {
+            subject.deleteModel(childModelGuid);
+
+            expectationBuilder = new ExpectationBuilder();
+            expectationBuilder.addModel(modelGuid,"TEST_MODEL", {"testprop" : "testval"})
+                .addNode(nodeGuid,"TEST_NODE")
+                .addNodeToModel(nodeGuid,modelGuid);
+            expect(subject.serialize()).to.deep.equal(expectationBuilder.toObject());
             done();
         });
+
+        it('the Node should result in a Model', (done) => {
+            subject.deleteNode(nodeGuid);
+
+            expectationBuilder = new ExpectationBuilder();
+            expectationBuilder.addModel(modelGuid,"TEST_MODEL", {"testprop" : "testval"})
+            expect(subject.serialize()).to.deep.equal(expectationBuilder.toObject());
+            done();
+        });
+
         it('the Model should result in an empty Graph', (done) => {
             subject.deleteModel(modelGuid);
-            var expected = {
-             "models"     : {},
-             "nodes"      : {},
-             "edges"      : {},
-             "connectors" : {}
-            };
+            var expected = new ExpectationBuilder().toObject();
             expect(subject.serialize()).to.deep.equal(expected);
             done();
         });
     });
-
+    /*
     describe('Deserialize', () => {
         it('Serialize(Deserialize(Serialize())) should equal Serialize()', (done) => {
                 var serialize = subject.serialize();
