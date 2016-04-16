@@ -1,4 +1,5 @@
 import * as Common from "cubitt-common"
+import * as Collections from 'typescript-collections';
 import {AbstractElement} from "./AbstractElement"
 import {NodeElement} from "./NodeElement"
 import {EdgeElement} from "./EdgeElement"
@@ -298,70 +299,79 @@ export class Graph implements GraphInterface {
      */
     public deserialize(jsonObject : Object) : GraphInterface {
         var graph = new Graph();
-        var modelElements: Common.Dictionary<ModelElement> = {};
         var models = jsonObject['models'];
-        // Models
+        var roots = [];
+        var queue : Collections.Queue<Object> = new Collections.Queue<Object>();
+        var inQueue : Common.Dictionary<Boolean> = {};
+        // Find root models
         for (var modelKey in models) {
             var model = models[modelKey];
-            // Only add the model elements themselves, any neighbours will be added
-            // by the other elements
-            var id = Common.Guid.parse(model["id"]);
-            var properties = this.propertiesFromJSON(model["properties"]);
-            graph.addModel(id,properties["type"],properties);
-        }
 
-        var nodes = jsonObject['nodes'];
-        for (var nodeKey in nodes) {
-            var node = nodes[nodeKey];
-            var id = Common.Guid.parse(node["id"]);
-            var properties = this.propertiesFromJSON(node["properties"]);
-            var modelNeighbours = node["neighbours"]["models"];
-            for (var modelKey in modelNeighbours) {
-                var model = modelNeighbours[modelKey];
-                if (model.role == undefined || model.role == "parent") {
-                    modelId = Common.Guid.parse(model.id);
-                    break;
-                }
+            if (Object.keys(model.neighbours.nodes.parent).length == 0 && Object.keys(model.neighbours.edges.parent).length == 0) {
+                queue.enqueue({"type" : "model", "element" : model.id.toString()});
+                inQueue[model.id.toString()] = true;
             }
+        }
+        while(queue.isEmpty() == false)
+        {
+            var obj = queue.dequeue();
+            var type = obj['type'];
+            var elemId = obj['element'];
+            var elem = jsonObject[type + 's'][elemId.toString()];
+            var properties = this.propertiesFromJSON(elem['properties']);
+            switch(type) {
+                case "model":
+                    if (elem['neighbours']['nodes']['parent'].length > 0) {
+                        graph.addModel(Common.Guid.parse(elem.id), properties["type"], properties, Common.Guid.parse(elem['neighbours']['nodes']['parent'][0]));
+                    } else if(elem['neighbours']['edges']['parent'].length > 0) {
+                        graph.addModel(Common.Guid.parse(elem.id), properties["type"], properties, Common.Guid.parse(elem['neighbours']['edges']['parent'][0]));
+                    } else {
+                        graph.addModel(Common.Guid.parse(elem.id), properties["type"], properties);
+                    }
+                    break;
+                case "node":
+                    graph.addNode(Common.Guid.parse(elem.id), properties["type"], Common.Guid.parse(elem['neighbours']['models']['parent'][0]), properties);
+                    // add Connectors
+                    var connectors = elem['neighbours']['connectors']['child'];
+                    for (var connectorKey of connectors) {
+                       var connector = jsonObject['connectors'][connectorKey];
+                       var id = Common.Guid.parse(connector['id']);
+                       var properties = this.propertiesFromJSON(connector["properties"]);
+                       graph.addConnector(id,properties['type'],Common.Guid.parse(elem.id), properties);
+                       inQueue[id.toString()] = true;
+                   }
+                    break;
+                case "edge":
+                    graph.addEdge(
+                        Common.Guid.parse(elem.id),
+                        properties["type"],
+                        Common.Guid.parse(elem['neighbours']['models']['parent'][0]),
+                        Common.Guid.parse(elem['neighbours']['connectors']['parent'][0]),
+                        Common.Guid.parse(elem['neighbours']['connectors']['parent'][1]),
+                        properties
+                    );
+                    break;
+                default:
+                    throw new Error("Invalid element type");
+            }
+            // Enqueue child elements, we directly add the connectors when processing the node
+            this.enqueueChildElement("model", elem['neighbours']['models']['child'], queue, inQueue);
+            this.enqueueChildElement("node", elem['neighbours']['nodes']['child'], queue, inQueue);
+            this.enqueueChildElement("edge", elem['neighbours']['edges']['child'], queue, inQueue);
 
-            graph.addNode(id,properties["type"], modelId, properties)
-        }
-        var connectors = jsonObject['connectors'];
-        for (var connectorKey in connectors) {
-            var connector = connectors[connectorKey];
-            var id = Common.Guid.parse(connector["id"]);
-            var properties = this.propertiesFromJSON(connector["properties"]);
-            var nodeNeighbours = connector["neighbours"]["nodes"];
-            var nodeId : Common.Guid;
-            for (var nodeKey in nodeNeighbours) {
-                var node = nodeNeighbours[nodeKey];
-                if (node.role == undefined || node.role == "parent") {
-                    nodeId = Common.Guid.parse(node.id);
-                    break;
-                }
-            }
-            graph.addConnector(id,properties['type'],nodeId, properties);
-        }
-        var edges = jsonObject['edges'];
-        for (var edgeKey in edges) {
-            var edge = edges[edgeKey];
-            var id = Common.Guid.parse(edge["id"]);
-            var properties = this.propertiesFromJSON(edge["properties"]);
-            var modelNeighbours = edge["neighbours"]["models"];
-            var modelId : Common.Guid;
-            for (var modelKey in modelNeighbours) {
-                var model = modelNeighbours[modelKey];
-                if (model.role == undefined || model.role == "parent") {
-                    modelId = Common.Guid.parse(model.id);
-                    break;
-                }
-            }
-            var startConnector = Common.Guid.parse(edge["neighbours"]["connectors"][0]['id']);
-            var endConnector = Common.Guid.parse(edge["neighbours"]["connectors"][1]['id']);
-            graph.addEdge(id,properties["type"],modelId,startConnector, endConnector, properties);
         }
         return graph;
     }
+
+    private enqueueChildElement(type : string, children,queue : Collections.Queue<Object> , inQueue : Common.Dictionary<Boolean>) {
+        for (var childElem of children) {
+            if (inQueue[childElem] != true) {
+                queue.enqueue({"type" : type, "element" : childElem});
+                inQueue[childElem] = true;
+            }
+        }
+    }
+
     /**
      * Creates a Property dictionary from JSON
      *
@@ -373,20 +383,6 @@ export class Graph implements GraphInterface {
             properties[propertyKey] = jsonProperties[propertyKey];
         }
         return properties;
-    }
-
-    private serializeNeighbours(parents: Common.Guid[], children: Common.Guid[]) {
-        return parents.map(
-                function(val) {
-                    return { "id" :val.toString(), "role" : "parent" };
-                }
-            ).concat(
-                children.map(
-                    function(val) {
-                        return { "id" :val.toString(), "role" : "child" };
-                    }
-                )
-            );
     }
 
     /**
@@ -408,10 +404,22 @@ export class Graph implements GraphInterface {
                     "id" : elem.Id.toString(),
                     "properties" : elem.getProperties(),
                     "neighbours" : {
-                        "models" : this.serializeNeighbours(elem.getParentModelNeighbours(), elem.getChildModelNeighbours()),
-                        "nodes"  : this.serializeNeighbours(elem.getParentNodeNeighbours(), elem.getChildNodeNeighbours()),
-                        "edges"  : this.serializeNeighbours(elem.getParentEdgeNeighbours(), elem.getChildEdgeNeighbours()),
-                        "connectors" : this.serializeNeighbours(elem.getParentConnectorNeighbours(), elem.getChildConnectorNeighbours())
+                        "models" : {
+                            "parent" : elem.getParentModelNeighbours().map(g => g.toString()),
+                            "child"  : elem.getChildModelNeighbours().map(g => g.toString())
+                        },
+                        "nodes"  : {
+                            "parent" : elem.getParentNodeNeighbours().map(g => g.toString()),
+                            "child"  : elem.getChildNodeNeighbours().map(g => g.toString())
+                        },
+                        "edges"  : {
+                            "parent" : elem.getParentEdgeNeighbours().map(g => g.toString()),
+                            "child"  : elem.getChildEdgeNeighbours().map(g => g.toString())
+                        },
+                        "connectors" : {
+                            "parent" : elem.getParentConnectorNeighbours().map(g => g.toString()),
+                            "child"  : elem.getChildConnectorNeighbours().map(g => g.toString())
+                        }
                     }
                 };
             if (elem.getType() == ElementType.Node) {

@@ -34,6 +34,7 @@
     "typings": "^0.6.2"
   },
   "dependencies": {
-    "cubitt-common": "~0.5.0"
+    "cubitt-common": "~0.5.0",
+    "typescript-collections": "^1.1.2"
   }
 }

@@ -95,7 +95,7 @@ describe('Single Node Hierarchical Graph', () => {
             done();
         });
     });
-    /*
+
     describe('Deserialize', () => {
         it('Serialize(Deserialize(Serialize())) should equal Serialize()', (done) => {
                 var serialize = subject.serialize();
@@ -104,5 +104,5 @@ describe('Single Node Hierarchical Graph', () => {
                 done();
         });
     });
-    */
+    
 });

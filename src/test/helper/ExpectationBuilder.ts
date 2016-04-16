@@ -18,10 +18,22 @@ export class ExpectationBuilder {
         this.graph.models[guid.toString()] = {
             "id" : guid.toString(),
             "neighbours" : {
-                "models"     : [],
-                "nodes"      : [],
-                "edges"      : [],
-                "connectors" : []
+                "models"     : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "nodes"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "edges"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "connectors" : {
+                    "parent" : [],
+                    "child"  : []
+                }
             },
             "properties" : properties
         };
@@ -33,10 +45,22 @@ export class ExpectationBuilder {
         this.graph.nodes[guid.toString()] = {
             "id" : guid.toString(),
             "neighbours" : {
-                "models"     : [],
-                "nodes"      : [],
-                "edges"      : [],
-                "connectors" : []
+                "models"     : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "nodes"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "edges"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "connectors" : {
+                    "parent" : [],
+                    "child"  : []
+                }
             },
             "properties" : properties
         };
@@ -48,10 +72,22 @@ export class ExpectationBuilder {
         this.graph.connectors[guid.toString()] = {
             "id" : guid.toString(),
             "neighbours" : {
-                "models"     : [],
-                "nodes"      : [],
-                "edges"      : [],
-                "connectors" : []
+                "models"     : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "nodes"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "edges"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "connectors" : {
+                    "parent" : [],
+                    "child"  : []
+                }
             },
             "properties" : properties
         };
@@ -63,10 +99,22 @@ export class ExpectationBuilder {
         this.graph.edges[guid.toString()] = {
             "id" : guid.toString(),
             "neighbours" : {
-                "models"     : [],
-                "nodes"      : [],
-                "edges"      : [],
-                "connectors" : []
+                "models"     : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "nodes"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "edges"      : {
+                    "parent" : [],
+                    "child"  : []
+                },
+                "connectors" : {
+                    "parent" : [],
+                    "child"  : []
+                }
             },
             "properties" : properties
         };
@@ -83,32 +131,32 @@ export class ExpectationBuilder {
     }
 
     public addNodeToModel(nodeGuid : Common.Guid, modelGuid: Common.Guid) : ExpectationBuilder {
-        this.graph.models[modelGuid.toString()]['neighbours']['nodes'].push({"id" : nodeGuid.toString() , "role" : "child"});
-        this.graph.nodes[nodeGuid.toString()]['neighbours']['models'].push({"id" : modelGuid.toString() , "role" : "parent"});
+        this.graph.models[modelGuid.toString()]['neighbours']['nodes']['child'].push(nodeGuid.toString());
+        this.graph.nodes[nodeGuid.toString()]['neighbours']['models']['parent'].push(modelGuid.toString());
         return this;
     }
 
     public addConnectorToNode(connectorGuid: Common.Guid, nodeGuid: Common.Guid) : ExpectationBuilder {
-        this.graph.connectors[connectorGuid.toString()]['neighbours']['nodes'].push({"id" : nodeGuid.toString() , "role" : "parent"});
-        this.graph.nodes[nodeGuid.toString()]['neighbours']['connectors'].push({"id" : connectorGuid.toString() , "role" : "child"});
+        this.graph.nodes[nodeGuid.toString()]['neighbours']['connectors']['child'].push(connectorGuid.toString());
+        this.graph.connectors[connectorGuid.toString()]['neighbours']['nodes']['parent'].push(nodeGuid.toString());
         return this;
     }
 
     public addEdgeToConnector(edgeGuid: Common.Guid, connectorGuid: Common.Guid) : ExpectationBuilder {
-        this.graph.connectors[connectorGuid.toString()]['neighbours']['edges'].push({"id" : edgeGuid.toString() , "role" : "child"});
-        this.graph.edges[edgeGuid.toString()]['neighbours']['connectors'].push({"id" : connectorGuid.toString() , "role" : "parent"});
+        this.graph.connectors[connectorGuid.toString()]['neighbours']['edges']['child'].push(edgeGuid.toString());
+        this.graph.edges[edgeGuid.toString()]['neighbours']['connectors']['parent'].push(connectorGuid.toString());
         return this;
     }
 
     public addEdgeToModel(edgeGuid: Common.Guid, modelGuid: Common.Guid) : ExpectationBuilder {
-        this.graph.models[modelGuid.toString()]['neighbours']['edges'].push({"id" : edgeGuid.toString() , "role" : "child"});
-        this.graph.edges[edgeGuid.toString()]['neighbours']['models'].push({"id" : modelGuid.toString() , "role" : "parent"});
+        this.graph.models[modelGuid.toString()]['neighbours']['edges']['child'].push(edgeGuid.toString());
+        this.graph.edges[edgeGuid.toString()]['neighbours']['models']['parent'].push(modelGuid.toString());
         return this;
     }
 
     public addModelToNode(modelGuid : Common.Guid, nodeGuid: Common.Guid) : ExpectationBuilder {
-        this.graph.models[modelGuid.toString()]['neighbours']['nodes'].push({"id" : nodeGuid.toString() , "role" : "parent"});
-        this.graph.nodes[nodeGuid.toString()]['neighbours']['models'].push({"id" : modelGuid.toString() , "role" : "child"});
+        this.graph.nodes[nodeGuid.toString()]['neighbours']['models']['child'].push(modelGuid.toString());
+        this.graph.models[modelGuid.toString()]['neighbours']['nodes']['parent'].push(nodeGuid.toString());
         return this;
     }
 
