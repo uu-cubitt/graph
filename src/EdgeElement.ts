@@ -80,6 +80,13 @@ export class EdgeElement extends AbstractElement {
             var model = graph.getElement(modelId);
             model.unlinkChildEdgeNeighbour(this.id);
         }
+
+        // Remove child models (if any)
+        var childModels = this.getChildModelNeighbours();
+        for (var childModelId of childModels) {
+            var childModel = graph.getElement(childModelId);
+            childModel.delete(graph);
+        }
         this.remove(graph);
     }
 }

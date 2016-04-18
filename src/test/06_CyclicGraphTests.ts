@@ -5,6 +5,7 @@ import chai = require('chai');
 import * as Common from "cubitt-common"
 import {GraphInterface,Project} from "./../cubitt-graph"
 import {ExpectationBuilder} from "./helper/ExpectationBuilder"
+import {uniqueGUID} from "./helper/UniqueGuid";
 
 var expect = chai.expect;
 describe('Cyclic Graph', () => {
@@ -25,32 +26,21 @@ describe('Cyclic Graph', () => {
     var edge2Guid : Common.Guid;
     var edge3Guid: Common.Guid;
 
-    var guids = [];
-    /* Helper function to create unique GUIDS for the test */
-    function uniqueGUID() {
-        var guid = Common.Guid.newGuid();
-        while(guids.indexOf(guid) >= 0) {
-            guid = Common.Guid.newGuid();
-        }
-        guids.push(guid);
-        return guid;
-    }
-
     beforeEach(function () {
         subject = new Project();
-        modelGuid = Common.Guid.newGuid();
+        modelGuid = uniqueGUID();
 
-        nodeGuid = Common.Guid.newGuid();
-        node2Guid = Common.Guid.newGuid();
-        node3Guid = Common.Guid.newGuid();
+        nodeGuid = uniqueGUID();
+        node2Guid = uniqueGUID();
+        node3Guid = uniqueGUID();
 
-        connectorGuid = Common.Guid.newGuid();
-        connector2Guid = Common.Guid.newGuid();
-        connector3Guid = Common.Guid.newGuid();
+        connectorGuid = uniqueGUID();
+        connector2Guid = uniqueGUID();
+        connector3Guid = uniqueGUID();
 
-        edgeGuid = Common.Guid.newGuid();
-        edge2Guid = Common.Guid.newGuid();
-        edge3Guid = Common.Guid.newGuid();
+        edgeGuid = uniqueGUID();
+        edge2Guid = uniqueGUID();
+        edge3Guid = uniqueGUID();
 
         subject.addModel(modelGuid,"TEST_MODEL", {"testprop" : "testval"});
         // Node 1

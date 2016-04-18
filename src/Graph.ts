@@ -300,7 +300,6 @@ export class Graph implements GraphInterface {
     public deserialize(jsonObject : Object) : GraphInterface {
         var graph = new Graph();
         var models = jsonObject['models'];
-        var roots = [];
         var queue : Collections.Queue<Object> = new Collections.Queue<Object>();
         var inQueue : Common.Dictionary<Boolean> = {};
         // Find root models
@@ -363,7 +362,15 @@ export class Graph implements GraphInterface {
         return graph;
     }
 
-    private enqueueChildElement(type : string, children,queue : Collections.Queue<Object> , inQueue : Common.Dictionary<Boolean>) {
+    /**
+     * Iterate over the child elements to add them
+     *
+     * @param type Type of the child elements
+     * @param children the Children to iterate over
+     * @param queue The queue to add elements to
+     * @param inQueue register which elements are processed
+     */
+    private enqueueChildElement(type : string, children, queue : Collections.Queue<Object> , inQueue : Common.Dictionary<Boolean>) {
         for (var childElem of children) {
             if (inQueue[childElem] != true) {
                 queue.enqueue({"type" : type, "element" : childElem});

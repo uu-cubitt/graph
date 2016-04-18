@@ -38,6 +38,14 @@ export class ModelElement extends AbstractElement {
             parentNode.unlinkChildModelNeighbour(this.id);
 
         }
+
+        // Remove model from any parent Edges (if any)
+        var parentEdges = this.getParentEdgeNeighbours();
+        for (var parentEdgeId of parentEdges) {
+            var parentEdge = graph.getElement(parentEdgeId);
+            parentEdge.unlinkChildModelNeighbour(this.id);
+
+        }
         this.remove(graph);
     }
 

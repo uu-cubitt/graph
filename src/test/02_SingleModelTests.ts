@@ -5,22 +5,14 @@ import chai = require('chai');
 import * as Common from "cubitt-common"
 import {GraphInterface,Project} from "./../cubitt-graph"
 import {ExpectationBuilder} from "./helper/ExpectationBuilder";
+import {uniqueGUID} from "./helper/UniqueGuid";
 
 var expect = chai.expect;
 describe('Single Model Graph', () => {
     var subject : GraphInterface;
     var expectationBuilder : ExpectationBuilder;
     var modelGuid : Common.Guid;
-    var guids = [];
-    /* Helper function to create unique GUIDS for the test */
-    function uniqueGUID() {
-        var guid = Common.Guid.newGuid();
-        while(guids.indexOf(guid) >= 0) {
-            guid = Common.Guid.newGuid();
-        }
-        guids.push(guid);
-        return guid;
-    }
+
 
     beforeEach(function () {
         subject = new Project();

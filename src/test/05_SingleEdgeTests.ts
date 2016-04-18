@@ -5,6 +5,7 @@ import chai = require('chai');
 import * as Common from "cubitt-common"
 import {GraphInterface,Project} from "./../cubitt-graph"
 import {ExpectationBuilder} from "./helper/ExpectationBuilder"
+import {uniqueGUID} from "./helper/UniqueGuid";
 
 var expect = chai.expect;
 describe('Single Edge Graph', () => {
@@ -20,25 +21,14 @@ describe('Single Edge Graph', () => {
 
     var edgeGuid : Common.Guid;
 
-    var guids = [];
-    /* Helper function to create unique GUIDS for the test */
-    function uniqueGUID() {
-        var guid = Common.Guid.newGuid();
-        while(guids.indexOf(guid) >= 0) {
-            guid = Common.Guid.newGuid();
-        }
-        guids.push(guid);
-        return guid;
-    }
-
     beforeEach(function () {
         subject = new Project();
-        modelGuid = Common.Guid.newGuid();
-        nodeGuid = Common.Guid.newGuid();
-        connectorGuid = Common.Guid.newGuid();
-        node2Guid = Common.Guid.newGuid();
-        connector2Guid = Common.Guid.newGuid();
-        edgeGuid = Common.Guid.newGuid();
+        modelGuid = uniqueGUID();
+        nodeGuid = uniqueGUID();
+        connectorGuid = uniqueGUID();
+        node2Guid = uniqueGUID();
+        connector2Guid = uniqueGUID();
+        edgeGuid = uniqueGUID();
         subject.addModel(modelGuid,"TEST_MODEL", {"testprop" : "testval"});
         subject.addNode(nodeGuid,"TEST_NODE", modelGuid);
         subject.addConnector(connectorGuid, "TEST_CONNECTOR", nodeGuid);

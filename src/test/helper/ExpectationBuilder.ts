@@ -160,6 +160,12 @@ export class ExpectationBuilder {
         return this;
     }
 
+    public addModelToEdge(modelGuid : Common.Guid, edgeGuid: Common.Guid) : ExpectationBuilder {
+        this.graph.edges[edgeGuid.toString()]['neighbours']['models']['child'].push(modelGuid.toString());
+        this.graph.models[modelGuid.toString()]['neighbours']['edges']['parent'].push(edgeGuid.toString());
+        return this;
+    }
+
     public toObject() : Object {
         return this.graph;
     }

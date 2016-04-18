@@ -5,9 +5,10 @@ import chai = require('chai');
 import * as Common from "cubitt-common"
 import {GraphInterface,Project} from "./../cubitt-graph"
 import {ExpectationBuilder} from "./helper/ExpectationBuilder"
+import {uniqueGUID} from "./helper/UniqueGuid";
 
 var expect = chai.expect;
-describe('Single Node Hierarchical Graph', () => {
+describe('Empty Hierarchical Graph', () => {
     var subject : GraphInterface;
     var expectationBuilder : ExpectationBuilder;
 
@@ -16,23 +17,13 @@ describe('Single Node Hierarchical Graph', () => {
 
     var nodeGuid : Common.Guid;
 
-    var guids = [];
-    /* Helper function to create unique GUIDS for the test */
-    function uniqueGUID() {
-        var guid = Common.Guid.newGuid();
-        while(guids.indexOf(guid) >= 0) {
-            guid = Common.Guid.newGuid();
-        }
-        guids.push(guid);
-        return guid;
-    }
     beforeEach(function () {
         subject = new Project();
 
-        modelGuid = Common.Guid.newGuid();
-        childModelGuid = Common.Guid.newGuid();
+        modelGuid = uniqueGUID();
+        childModelGuid = uniqueGUID();
 
-        nodeGuid = Common.Guid.newGuid();
+        nodeGuid = uniqueGUID();
 
         subject.addModel(modelGuid,"TEST_MODEL", {"testprop" : "testval"});
         subject.addNode(nodeGuid,"TEST_NODE", modelGuid);
@@ -104,5 +95,5 @@ describe('Single Node Hierarchical Graph', () => {
                 done();
         });
     });
-    
+
 });
