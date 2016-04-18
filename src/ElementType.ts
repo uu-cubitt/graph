@@ -1,6 +1,6 @@
 export enum ElementType {
-    "Node",
-    "Edge",
-    "Connector",
-    "Model"
+	"Node",
+	"Edge",
+	"Connector",
+	"Model"
 }
