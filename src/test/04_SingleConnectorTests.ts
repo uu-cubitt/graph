@@ -1,6 +1,3 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/chai/chai.d.ts" />
-
 import chai = require("chai");
 import * as Common from "cubitt-common";
 import {GraphInterface, Project} from "./../cubitt-graph";
@@ -23,12 +20,12 @@ describe("Single Connector Graph", () => {
 		connectorGuid = uniqueGUID();
 		subject.addModel(modelGuid, "TEST_MODEL", {"testprop" : "testval"});
 		subject.addNode(nodeGuid, "TEST_NODE", modelGuid);
-		subject.addConnector(connectorGuid, "TEST_CONNECTOR", nodeGuid);
+		subject.addConnector(connectorGuid, "TEST_CONNECTOR", nodeGuid, {"testprop" : "testval"});
 
 		expectationBuilder = new ExpectationBuilder();
 		expectationBuilder.addModel(modelGuid, "TEST_MODEL", {"testprop" : "testval"})
 			.addNode(nodeGuid, "TEST_NODE")
-			.addConnector(connectorGuid, "TEST_CONNECTOR")
+			.addConnector(connectorGuid, "TEST_CONNECTOR", {"testprop" : "testval"})
 			.addNodeToModel(nodeGuid, modelGuid)
 			.addConnectorToNode(connectorGuid, nodeGuid);
 	});

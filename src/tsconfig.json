@@ -1,48 +1,22 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "noImplicitAny": false,
-        "removeComments": true,
-        "noLib": false,
-        "preserveConstEnums": true,
-        "declaration": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "outDir": "../dist/",
-        "sourceMap": true
-    },
-    "filesGlob": [
-        "./**/*.ts",
-        "!./node_modules/**/*.ts"
-    ],
-    "files": [
-        "./AbstractElement.ts",
-        "./ConnectorElement.ts",
-        "./cubitt-graph.ts",
-        "./EdgeElement.ts",
-        "./ElementType.ts",
-        "./Graph.ts",
-        "./GraphInterface.ts",
-        "./ModelElement.ts",
-        "./NodeElement.ts",
-        "./Project.ts",
-        "./test/01_EmptyGraphTests.ts",
-        "./test/02_SingleModelTests.ts",
-        "./test/03_SingleNodeTests.ts",
-        "./test/04_SingleConnectorTests.ts",
-        "./test/05_SingleEdgeTests.ts",
-        "./test/06_CyclicGraphTests.ts",
-        "./test/07_EmptyHierarchicalGraphTests.ts",
-        "./test/08_SingleNodeHierarchicalGraphTest.ts",
-        "./test/09_SingleEdgeHierarchicalGraphTest.ts",
-        "./test/helper/ExpectationBuilder.ts",
-        "./test/helper/UniqueGuid.ts",
-        "./typings/assertion-error/assertion-error.d.ts",
-        "./typings/chai/chai.d.ts",
-        "./typings/mocha/mocha.d.ts",
-        "./typings/tsd.d.ts"
-    ],
-    "atom": {
-        "rewriteTsconfig": true
-    }
+	"version": "1.0.0",
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"noImplicitAny": true,
+		"removeComments": false,
+		"noLib": false,
+		"preserveConstEnums": true,
+		"declaration": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"outDir": "./../dist/",
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"allowUnreachableCode": false,
+		"sourceMap": true
+	},
+	"exclude": [
+		"typings/browser",
+		"typings/browser.d.ts"
+	]
 }

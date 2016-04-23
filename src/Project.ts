@@ -13,119 +13,119 @@ export class Project implements GraphInterface {
 	/**
 	 * @inheritdoc
 	 */
-	public addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties: Common.Dictionary<any> = {}) {
+	public addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties: Common.Dictionary<any> = {}): void {
 		this.graph.addNode(id, type, modelId, properties);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public addEdge(id: Common.Guid, type: string, modelId: Common.Guid, startConnectorId: Common.Guid, endConnectorId: Common.Guid, properties: Common.Dictionary<any>) {
+	public addEdge(id: Common.Guid, type: string, modelId: Common.Guid, startConnectorId: Common.Guid, endConnectorId: Common.Guid, properties: Common.Dictionary<any>): void {
 		this.graph.addEdge(id, type, modelId, startConnectorId, endConnectorId, properties);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	addConnector(id: Common.Guid, type: string, nodeId: Common.Guid, properties: Common.Dictionary<any> = {}) {
+	public addConnector(id: Common.Guid, type: string, nodeId: Common.Guid, properties: Common.Dictionary<any> = {}): void {
 		this.graph.addConnector(id, type, nodeId, properties);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any> = {}, parentId ?: Common.Guid) {
+	public addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any> = {}, parentId ?: Common.Guid): void {
 		this.graph.addModel(id, type, properties, parentId);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	setProperty(id: Common.Guid, name: string, value: any) {
+	public setProperty(id: Common.Guid, name: string, value: any): void {
 		this.graph.setProperty(id, name, value);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deleteNode(id: Common.Guid) {
+	public deleteNode(id: Common.Guid): void {
 		this.graph.deleteNode(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deleteEdge(id: Common.Guid) {
+	public deleteEdge(id: Common.Guid): void {
 		this.graph.deleteEdge(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deleteConnector(id: Common.Guid) {
+	public deleteConnector(id: Common.Guid): void {
 		this.graph.deleteConnector(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deleteModel(id: Common.Guid) {
+	public deleteModel(id: Common.Guid): void {
 		this.graph.deleteModel(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deleteProperty(id: Common.Guid, key: string) {
+	public deleteProperty(id: Common.Guid, key: string): void {
 		this.graph.deleteProperty(id, key);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	serialize() {
+	public serialize(): Object {
 		return this.graph.serialize();
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	deserialize(jsonObject: Object) {
+	public deserialize(jsonObject: Object): GraphInterface {
 		return this.graph.deserialize(jsonObject);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	hasElement(id: Common.Guid) {
+	public hasElement(id: Common.Guid): boolean {
 		return this.graph.hasElement(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	hasModel(id: Common.Guid) {
+	public hasModel(id: Common.Guid): boolean {
 		return this.graph.hasModel(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	hasNode(id: Common.Guid) {
+	public hasNode(id: Common.Guid): boolean {
 		return this.graph.hasNode(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	hasConnector(id: Common.Guid) {
+	public hasConnector(id: Common.Guid): boolean {
 		return this.graph.hasConnector(id);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	hasEdge(id: Common.Guid) {
+	public hasEdge(id: Common.Guid): boolean {
 		return this.graph.hasEdge(id);
 	}
 }

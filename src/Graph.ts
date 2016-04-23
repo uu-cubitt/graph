@@ -27,7 +27,9 @@ export class Graph implements GraphInterface {
 	 */
 	public getElement(id: Common.Guid): AbstractElement {
 		let elem = this.elements[id.toString()];
+		/* istanbul ignore if */
 		if (elem === undefined) {
+			/* istanbul ignore next */
 			throw new Error("Element with GUID " + id.toString() + " not found");
 		}
 		return elem;
@@ -84,7 +86,8 @@ export class Graph implements GraphInterface {
 		} else {
 			let elem = this.elements[id.toString()];
 			if (elem !== undefined) {
-				// It"s fine if the elem did not exist (the endresult is the same)
+				// It's fine if the elem did not exist (the endresult is the same)
+				/* istanbul ignore if */
 				if (elem.getType() !== ofType) {
 					throw new Error("Attempted to delete a " + elem.getType() + " with delete" + ofType.toString());
 				}
@@ -96,17 +99,21 @@ export class Graph implements GraphInterface {
 	/**
 	 * @inheritdoc
 	 */
-	public addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties: Common.Dictionary<any> = {}) {
+	public addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties: Common.Dictionary<any>): void {
+		/* istanbul ignore if */
 		if (this.hasElement(id)) {
 			throw new Error("An Element with GUID " + id.toString() + " already exists");
 		}
 		let model = this.elements[modelId.toString()];
+		/* istanbul ignore if */
 		if (model === undefined) {
 			throw new Error("No model with GUID " + modelId + " could be found");
 		}
+		/* istanbul ignore if */
 		if (model.getType() !== ElementType.Model) {
 			throw new Error("GUID " + modelId.toString() + " does not belong to a model");
 		}
+		/* istanbul ignore if */
 		if (properties === null || properties === undefined) {
 			properties = {};
 		}
@@ -123,36 +130,44 @@ export class Graph implements GraphInterface {
 	 */
 	public addEdge(id: Common.Guid, type: string, modelId: Common.Guid, startConnectorId: Common.Guid, endConnectorId: Common.Guid, properties: Common.Dictionary<any> = {}) {
 		// Validate GUID
+		/* istanbul ignore if */
 		if (this.hasElement(id)) {
 			throw new Error("An Element with GUID " + id.toString() + " already exists");
 		}
 
 		// Validate modelID
 		let model = this.elements[modelId.toString()];
+		/* istanbul ignore if */
 		if (model === undefined) {
 			throw new Error("No model with GUID " + modelId + " could be found");
 		}
+		/* istanbul ignore if */
 		if (model.getType() !== ElementType.Model) {
 			throw new Error("Element with GUID " + modelId.toString() + " is not a Model");
 		}
 
 		// Validate startConnector
 		let startConnector = this.elements[startConnectorId.toString()];
+		/* istanbul ignore if */
 		if (startConnector === undefined) {
 			throw new Error("No startConnector with GUID " + startConnectorId + " could be found");
 		}
+		/* istanbul ignore if */
 		if (startConnector.getType() !== ElementType.Connector) {
 			throw new Error("Invalid startConnectorId, " + startConnectorId + " does not belong to a connector");
 		}
 
 		// Validate endConnectorId
 		let endConnector = this.elements[endConnectorId.toString()];
+		/* istanbul ignore if */
 		if (endConnector === undefined) {
 			throw new Error("No endConnector with GUID " + endConnectorId + " could be found");
 		}
+		/* istanbul ignore if */
 		if (endConnector.getType() !== ElementType.Connector) {
 			throw new Error("Invalid endConnectorId, " + endConnectorId + " does not belong to a connector");
 		}
+		/* istanbul ignore if */
 		if (properties === null || properties === undefined) {
 			properties = {};
 		}
@@ -176,18 +191,22 @@ export class Graph implements GraphInterface {
 	 */
 	public addConnector(id: Common.Guid, type: string, nodeId: Common.Guid, properties: Common.Dictionary<any>) {
 		// Validate GUID
+		/* istanbul ignore if */
 		if (this.hasElement(id)) {
 			throw new Error("An Element with GUID " + id.toString() + " already exists");
 		}
 
 		// Validate nodeId exists
 		let node = this.elements[nodeId.toString()];
+		/* istanbul ignore if */
 		if (node === undefined) {
 			throw new Error("No node with GUID " + nodeId + " could be found");
 		}
+		/* istanbul ignore if */
 		if (node.getType() !== ElementType.Node) {
 			throw new Error("Invalid nodeId, " + nodeId + " does not belong to a Node");
 		}
+		/* istanbul ignore if */
 		if (properties === null || properties === undefined) {
 			properties = {};
 		}
@@ -204,6 +223,7 @@ export class Graph implements GraphInterface {
 	 */
 	public addModel(id: Common.Guid, type: string, properties: Common.Dictionary<any>, parentId?: Common.Guid) {
 		// Validate GUID
+		/* istanbul ignore if */
 		if (this.hasElement(id)) {
 			throw new Error("An Element with GUID " + id.toString() + " already exists");
 		}
@@ -211,10 +231,12 @@ export class Graph implements GraphInterface {
 		if (parentId !== null && parentId !== undefined) {
 
 			// Validate if there is an node or edge with the provided GUID
+			/* istanbul ignore if */
 			if ((this.hasNode(parentId) || this.hasEdge(parentId)) === false) {
 				throw new Error("No Node or Edge with GUID " + parentId.toString() + " could be found");
 			}
 		}
+		/* istanbul ignore if */
 		if (properties === null || properties === undefined) {
 			properties = {};
 		}
@@ -239,6 +261,7 @@ export class Graph implements GraphInterface {
 	 * @inheritdoc
 	 */
 	public setProperty(id: Common.Guid, name: string, value: any) {
+		/* istanbul ignore if */
 		if (this.hasElement(id) === false) {
 			throw new Error("An Element with GUID " + id.toString() + " could not be found");
 		}
@@ -276,12 +299,13 @@ export class Graph implements GraphInterface {
 	/**
 	 * @inheritdoc
 	 */
-	public deleteProperty(id: Common.Guid, name: string) {
+	public deleteProperty(id: Common.Guid, name: string): void {
 		let elem = this.elements[id.toString()];
+		/* istanbul ignore if */
 		if (elem === undefined) {
 			throw new Error("Element not found");
 		}
-		elem.deleteProperty(id, name);
+		elem.deleteProperty(name);
 	}
 
 	/**
@@ -327,6 +351,22 @@ export class Graph implements GraphInterface {
 						let connectorProperties = this.propertiesFromJSON(connector["properties"]);
 						graph.addConnector(id, connectorProperties["type"], Common.Guid.parse(elem.id), connectorProperties);
 						inQueue[id.toString()] = true;
+						let edgeIds = connector["neighbours"]["edges"]["child"];
+						let edges: string[] = [];
+						for (let edgeId of edgeIds) {
+							let edge = jsonObject["edges"][edgeId];
+							let isInQueue = true;
+							for (let connectorId of edge["neighbours"]["connectors"]["parent"]) {
+								if (inQueue[connectorId] !== true) {
+									isInQueue = false;
+								}
+							}
+							if (isInQueue === true) {
+								edges.push(edgeId);
+							}
+						}
+						this.enqueueChildElement("edge", edges, queue, inQueue);
+						continue;
 					}
 					break;
 				case "edge":
@@ -339,13 +379,13 @@ export class Graph implements GraphInterface {
 						properties
 					);
 					break;
+				/* istanbul ignore next */
 				default:
 					throw new Error("Invalid element type");
 			}
 			// Enqueue child elements, we directly add the connectors when processing the node
 			this.enqueueChildElement("model", elem["neighbours"]["models"]["child"], queue, inQueue);
 			this.enqueueChildElement("node", elem["neighbours"]["nodes"]["child"], queue, inQueue);
-			this.enqueueChildElement("edge", elem["neighbours"]["edges"]["child"], queue, inQueue);
 
 		}
 		return graph;
@@ -359,8 +399,9 @@ export class Graph implements GraphInterface {
 	 * @param queue The queue to add elements to
 	 * @param inQueue register which elements are processed
 	 */
-	private enqueueChildElement(type: string, children, queue: Collections.Queue<Object>, inQueue: Common.Dictionary<Boolean>) {
+	private enqueueChildElement(type: string, children: string[], queue: Collections.Queue<Object>, inQueue: Common.Dictionary<Boolean>) {
 		for (let childElem of children) {
+			/* istanbul ignore else */
 			if (inQueue[childElem] !== true) {
 				queue.enqueue({ "type": type, "element": childElem });
 				inQueue[childElem] = true;

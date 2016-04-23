@@ -19,7 +19,7 @@ export abstract class AbstractElement {
 	 * @param id GUID of the Element that is created
 	 * @param properties of the Element
 	 */
-	constructor(id: Common.Guid, properties: Common.Dictionary<any> = {}) {
+	constructor(id: Common.Guid, properties: Common.Dictionary<any>) {
 		this.id = id;
 		this.properties = properties;
 		this.parentNodeNeighbours = {};
@@ -76,7 +76,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addChildNodeNeighbour(id: Common.Guid) {
+	public addChildNodeNeighbour(id: Common.Guid): void {
 		this.childNodeNeighbours[id.toString()] = id;
 	}
 
@@ -85,7 +85,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addParentEdgeNeighbour(id: Common.Guid) {
+	public addParentEdgeNeighbour(id: Common.Guid): void {
 		this.parentEdgeNeighbours[id.toString()] = id;
 	}
 
@@ -94,7 +94,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addChildEdgeNeighbour(id: Common.Guid) {
+	public addChildEdgeNeighbour(id: Common.Guid): void {
 		this.childEdgeNeighbours[id.toString()] = id;
 	}
 
@@ -103,7 +103,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addParentConnectorNeighbour(id: Common.Guid) {
+	public addParentConnectorNeighbour(id: Common.Guid): void {
 		this.parentConnectorNeighbours[id.toString()] = id;
 	}
 
@@ -112,7 +112,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addChildConnectorNeighbour(id: Common.Guid) {
+	public addChildConnectorNeighbour(id: Common.Guid): void {
 		this.childConnectorNeighbours[id.toString()] = id;
 	}
 
@@ -121,7 +121,7 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addParentModelNeighbour(id: Common.Guid) {
+	public addParentModelNeighbour(id: Common.Guid): void {
 		this.parentModelNeighbours[id.toString()] = id;
 	}
 
@@ -130,57 +130,8 @@ export abstract class AbstractElement {
 	 *
 	 * @param id Guid of the element that should be added
 	 */
-	public addChildModelNeighbour(id: Common.Guid) {
+	public addChildModelNeighbour(id: Common.Guid): void {
 		this.childModelNeighbours[id.toString()] = id;
-	}
-
-	/**
-	 * Returns all neighbours, optionally filtered by ElementType
-	 *
-	 * @param type The elementtype to filter by, by default all elements are returned
-	 */
-	protected internalGetNeighbours(type?: ElementType): Common.Guid[] {
-		if (type === ElementType.Node) {
-			let parents = this.toArray(this.parentNodeNeighbours);
-			let children = this.toArray(this.childNodeNeighbours);
-			return parents.concat(children);
-		} else if (type === ElementType.Edge) {
-			let parents = this.toArray(this.parentEdgeNeighbours);
-			let children = this.toArray(this.childEdgeNeighbours);
-			return parents.concat(children);
-		} else if (type === ElementType.Connector) {
-			let parents = this.toArray(this.parentConnectorNeighbours);
-			let children = this.toArray(this.childConnectorNeighbours);
-			return parents.concat(children);
-		} else if (type === ElementType.Model) {
-			let parents = this.toArray(this.parentModelNeighbours);
-			let children = this.toArray(this.childModelNeighbours);
-			return parents.concat(children);
-		} else {
-			let types: Array<Common.Dictionary<Common.Guid>> = [];
-			types.push(this.parentNodeNeighbours);
-			types.push(this.childNodeNeighbours);
-			types.push(this.parentEdgeNeighbours);
-			types.push(this.childEdgeNeighbours);
-			types.push(this.parentConnectorNeighbours);
-			types.push(this.childConnectorNeighbours);
-			types.push(this.parentModelNeighbours);
-			types.push(this.childModelNeighbours);
-			let result = [];
-			for (let elems of types) {
-					for (let key in elems) {
-							result.push(elems[key]);
-					}
-			}
-			return result;
-		}
-	}
-
-	/**
-	 * Returns all neighbours
-	 */
-	public getNeighbours(): Common.Guid[] {
-		return this.internalGetNeighbours();
 	}
 
 	/**
@@ -245,7 +196,7 @@ export abstract class AbstractElement {
 	 * @param name Name of the property to set
 	 * @param value desired value
 	 */
-	public setProperty(name: string, value: any) {
+	public setProperty(name: string, value: any): void {
 		this.properties[name] = value;
 	}
 
@@ -255,7 +206,7 @@ export abstract class AbstractElement {
 	 * @param id Identifier of the Node
 	 * @param name of the property
 	 */
-	public deleteProperty(id: Common.Guid, name: string) {
+	public deleteProperty(name: string): void {
 		if (name === "type") {
 			throw new Error("Deleting property 'type' is not allowed");
 		}
@@ -263,28 +214,10 @@ export abstract class AbstractElement {
 	}
 
 	/**
-	 * Returns a value of a property of this Element
-	 *
-	 * @param name Name of the property to retrieve
-	 */
-	public getProperty(name: string): any {
-		return this.properties[name];
-	}
-
-	/**
 	 * Returns all properties of this Element
 	 */
 	public getProperties(): Common.Dictionary<any> {
 		return this.properties;
-	}
-
-	/**
-	 * Unlink a link to a neighbouring parent Node
-	 *
-	 * @param id Identifier of the parent Node that should be unlinked
-	 */
-	public unlinkParentNodeNeighbour(id: Common.Guid) {
-		delete this.parentNodeNeighbours[id.toString()];
 	}
 
 	/**
@@ -297,15 +230,6 @@ export abstract class AbstractElement {
 	}
 
 	/**
-	 * Unlink a link to a neighbouring Parent Edge
-	 *
-	 * @param id Identifier of the Parent Edge that should be unlinked
-	 */
-	public unlinkParentEdgeNeighbour(id: Common.Guid) {
-		delete this.parentEdgeNeighbours[id.toString()];
-	}
-
-	/**
 	 * Unlink a link to a neighbouring Child Edge
 	 *
 	 * @param id Identifier of the Child Edge that should be unlinked
@@ -315,30 +239,12 @@ export abstract class AbstractElement {
 	}
 
 	/**
-	 * Unlink a link to a neighbouring Parent Connector
-	 *
-	 * @param id Identifier of the Connector that should be unlinked
-	 */
-	public unlinkParentConnectorNeighbour(id: Common.Guid) {
-		delete this.parentConnectorNeighbours[id.toString()];
-	}
-
-	/**
 	 * Unlink a link to a neighbouring Child Connector
 	 *
 	 * @param id Identifier of the Connector that should be unlinked
 	 */
 	public unlinkChildConnectorNeighbour(id: Common.Guid) {
 		delete this.childConnectorNeighbours[id.toString()];
-	}
-
-	/**
-	 * Unlink a link to a neighbouring parent Model
-	 *
-	 * @param id Identifier of the parent Model that should be unlinked
-	 */
-	public unlinkParentModelNeighbour(id: Common.Guid) {
-		delete this.parentModelNeighbours[id.toString()];
 	}
 
 	/**

@@ -13,7 +13,7 @@ export interface GraphInterface {
 	 * @param modelId Identifier of the model that contains this Node
 	 * @param properties Dictionary of properties of the Node
 	 */
-	addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties ?: Common.Dictionary<any>);
+	addNode(id: Common.Guid, type: string, modelId: Common.Guid, properties ?: Common.Dictionary<any>): void;
 
 	/**
 	 * Adds an Edge to the Graph
@@ -25,7 +25,7 @@ export interface GraphInterface {
 	 * @param endConnectorId Identifier of the connector to which this Edge will go
 	 * @param properties Dictionary of properties of the Edge
 	 */
-	addEdge(id: Common.Guid, type: string, modelId: Common.Guid, startConnectorId: Common.Guid, endConnectorId: Common.Guid, properties ?: Common.Dictionary<any>);
+	addEdge(id: Common.Guid, type: string, modelId: Common.Guid, startConnectorId: Common.Guid, endConnectorId: Common.Guid, properties ?: Common.Dictionary<any>): void;
 
 	/**
 	 * Adds a Connector to the Graph
@@ -35,7 +35,7 @@ export interface GraphInterface {
 	 * @param nodeId Identifier of the Node that contains this Connector
 	 * @param properties Dictionary of properties of the Connector
 	 */
-	addConnector(id: Common.Guid, type: string, nodeId: Common.Guid, properties ?: Common.Dictionary<any>);
+	addConnector(id: Common.Guid, type: string, nodeId: Common.Guid, properties ?: Common.Dictionary<any>): void;
 
 	/**
 	 * Adds a Model to the Graph
@@ -46,7 +46,7 @@ export interface GraphInterface {
 	 * @param parentId Identifier of the parent of this subgraph. Leave empty to create a model under the root
 	 *
 	 */
-	addModel(id: Common.Guid, type: string, properties ?: Common.Dictionary<any>, parentId ?: Common.Guid);
+	addModel(id: Common.Guid, type: string, properties ?: Common.Dictionary<any>, parentId ?: Common.Guid): void;
 
 	/**
 	 * Sets a property on an Element
@@ -55,35 +55,35 @@ export interface GraphInterface {
 	 * @param name Name of the property that will be set
 	 * @param value The value to set the property with
 	 */
-	setProperty(nodeId: Common.Guid, name: string, value: any);
+	setProperty(nodeId: Common.Guid, name: string, value: any): void;
 
 	/**
 	 * Deletes a Node from the Graph
 	 *
 	 * @param id Identifier of the Node to delete
 	 */
-	deleteNode(id: Common.Guid);
+	deleteNode(id: Common.Guid): void;
 
 	/**
 	 * Deletes an Edge from the Graph
 	 *
 	 * @param id Identifier of the Edge to delete
 	 */
-	deleteEdge(id: Common.Guid);
+	deleteEdge(id: Common.Guid): void;
 
 	/**
 	 * Deletes a Connector from the Graph
 	 *
 	 * @param id Identifier of the Connector to delete
 	 */
-	deleteConnector(id: Common.Guid);
+	deleteConnector(id: Common.Guid): void;
 
 	/**
 	 * Deletes a Model from the Graph
 	 *
 	 * @param id Identifier of the Model to delete
 	 */
-	deleteModel(id: Common.Guid);
+	deleteModel(id: Common.Guid): void;
 
 	/**
 	 * Deletes a Property from the Graph
@@ -91,7 +91,7 @@ export interface GraphInterface {
 	 * @param id Identifier of the Element that contains the property
 	 * @param name of the property that should be deleted
 	 */
-	deleteProperty(id: Common.Guid, name: string);
+	deleteProperty(id: Common.Guid, name: string): void;
 
 	/**
 	 * Transforms this Graph to a plain JSON graph

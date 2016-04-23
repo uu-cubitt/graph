@@ -1,6 +1,3 @@
-/// <reference path="../typings/mocha/mocha.d.ts" />
-/// <reference path="../typings/chai/chai.d.ts" />
-
 import chai = require("chai");
 import {GraphInterface, Project} from "./../cubitt-graph";
 import {ExpectationBuilder} from "./helper/ExpectationBuilder";

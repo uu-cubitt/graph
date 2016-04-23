@@ -16,32 +16,14 @@ export class EdgeElement extends AbstractElement {
 	}
 
 	/**
-	 * Returns the start ConnectorID
-	 */
-	public getStartConnector(): Common.Guid {
-		return this.start;
-	}
-
-	/**
-	 * Returns the end ConnectorID
-	 */
-	public getEndConnector(): Common.Guid {
-		return this.end;
-	}
-
-	/**
 	 * Override that ensures that the StartConnector is element 0, Endconnector is element 1
 	 * Any (potential) other connectors are at indices > 1
 	 */
 	public getConnectorNeighbours(): Common.Guid[] {
-		let edges = [];
-		edges.push(this.start);
-		edges.push(this.end);
-		let allEdges = this.internalGetNeighbours(ElementType.Edge).filter(function(elem) {
-			return elem !== this.start && elem !== this.end;
-		});
-		edges = edges.concat(allEdges);
-		return edges;
+		let connectors: Common.Guid[] = [];
+		connectors.push(this.start);
+		connectors.push(this.end);
+		return connectors;
 	}
 
 	/**
