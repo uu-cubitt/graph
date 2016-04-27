@@ -3,6 +3,8 @@ Typescript Graph library for the Cubitt framework.
 
 [![npm version](https://badge.fury.io/js/cubitt-graph.svg)](https://badge.fury.io/js/cubitt-graph)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/uu-cubitt/graph/master/LICENSE)
+[![Build Status](https://travis-ci.org/uu-cubitt/graph.svg?branch=master)](https://travis-ci.org/uu-cubitt/graph)
+[![Test Coverage](https://codeclimate.com/github/uu-cubitt/graph/badges/coverage.svg)](https://codeclimate.com/github/uu-cubitt/graph/coverage)
 
 ## About
 
@@ -29,11 +31,11 @@ $ npm install cubitt-graph
 ## Features
 
 * Intergraph links
-* Subgraphs (will be extended to hierarchical graphs, see [issue \#1](https://github.com/uu-cubitt/graph/issues/1))
+* Hierarchical graphs
 * Connector support
 * Properties support on all Elements
 * Typescript
-* Unit tested (not yet 100%, we are working on that, essential features are covered)
+* Unit tested 
 
 ## Usage
 
