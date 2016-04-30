@@ -1,6 +1,6 @@
 {
   "name": "cubitt-graph",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cubitt in-memory graph with subgraphs and connectors",
   "main": "dist/cubitt-graph.js",
   "typings": "dist/cubitt-graph",
@@ -43,7 +43,7 @@
 		"typedoc": "^0.3.12"
   },
   "dependencies": {
-    "cubitt-common": "~0.5.0",
+    "cubitt-common": "^1.0.0",
     "typescript-collections": "^1.1.2"
   }
 }
