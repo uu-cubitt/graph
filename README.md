@@ -50,7 +50,7 @@ All available methods on this class are described in the [Code documentation](ht
 ## Documentation
 
 * [Code documentation](https://uu-cubitt.github.io/graph/)
-* [Design documentation](https://uu-cubitt.github.io/graph/design/)
+* [General documentation](https://cubitt.readme.io/docs/information-viewpoint)
 
 ## For developers
 

@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.0.2
+- Updated documentation
+# 1.0.1
+- Updated common dependency
 ## 1.0.0
 - Support for Hierarchical graphs [(Issue #1)](https://github.com/uu-cubitt/graph/issues/1)
 - Switched to scenario based tests

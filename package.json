@@ -1,17 +1,17 @@
 {
   "name": "cubitt-graph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cubitt in-memory graph with subgraphs and connectors",
   "main": "dist/cubitt-graph.js",
   "typings": "dist/cubitt-graph",
   "scripts": {
-		"lint": "cd ./src/ && ./../node_modules/.bin/tslint --force \"./**/*.ts\" -e \"./{typings,test}/**\"",
-		"build": "cd ./src/ && ./../node_modules/.bin/typings install && tsc",
-		"test": "cd dist && ./../node_modules/.bin/mocha --require source-map-support/register",
-		"test-coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- ./dist/test/ -R spec && remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json && ./node_modules/.bin/istanbul report lcov",
+		"lint": "cd ./src/ && tslint --force \"./**/*.ts\" -e \"./{typings,test}/**\"",
+		"build": "cd ./src/ && typings install && tsc",
+		"test": "cd dist && mocha --require source-map-support/register",
+		"test-coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- ./dist/test/ -R spec && remap-istanbul -i ./coverage/coverage.json -o ./coverage/coverage.json && istanbul report lcov",
 		"dev": "npm install && npm run lint && npm run build",
-		"codeclimate": "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
-		"typedoc": "rm -rf ./src/typings/ && ./node_modules/.bin/typedoc --out ./doc/ --module commonjs --exclude **/test/**/*.ts --readme ./readme.md --target ES5 --mode file ./src/"
+		"codeclimate": "codeclimate-test-reporter < ./coverage/lcov.info",
+		"typedoc": "rm -rf ./src/typings/ && typedoc --out ./doc/ --module commonjs --exclude **/test/**/*.ts --readme ./readme.md --target ES5 --mode file ./src/"
   },
   "repository": {
     "type": "git",
@@ -40,7 +40,7 @@
 		"istanbul": "^0.4.3",
 		"remap-istanbul": "^0.5.1",
 		"codeclimate-test-reporter": "^0.3.1",
-		"typedoc": "^0.3.12"
+		"typedoc": "^0.4.4"
   },
   "dependencies": {
     "cubitt-common": "^1.0.0",
